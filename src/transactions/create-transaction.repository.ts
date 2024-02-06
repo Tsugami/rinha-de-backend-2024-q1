@@ -11,12 +11,10 @@ export const createTransaction = async (
   input: CreateTransactionInputDto
 ): Promise<CreateTransactionOutputDto> => {
   return db.$transaction(async (tx) => {
-    const isDebit = input.tipo === "d";
-
     try {
       const sender = await tx.account.update({
         data: {
-          [isDebit ? "limite" : "saldo"]: {
+          saldo: {
             increment: input.valor,
           },
         },

@@ -9,9 +9,7 @@ CREATE TABLE "accounts" (
     "limite" BIGINT NOT NULL
 );
 
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_saldo_zero_check" CHECK ("saldo" >= 0);
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_limite_zero_check" CHECK ("limite" >= 0);
-
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_saldo_limit" CHECK ("saldo" >= ~"limite");
 
 -- CreateTable
 CREATE TABLE "transactions" (
