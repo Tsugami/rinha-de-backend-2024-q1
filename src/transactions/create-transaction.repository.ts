@@ -5,13 +5,14 @@ import type {
   CreateTransactionOutputDto,
 } from "./dto/create-transaction.dto";
 import { Prisma } from "@prisma/client";
+import { UnprocessableEntityError } from "../lib/UnprocessableEntityError";
 
 export const createTransaction = async (
   input: CreateTransactionInputDto
 ): Promise<CreateTransactionOutputDto> => {
   return db.$transaction(async (tx) => {
     const isDebit = input.tipo === "d";
-    // const isOverdraft = isDebit && input.valor > account.saldo + account.limite;
+
     try {
       const sender = await tx.account.update({
         data: {
@@ -49,8 +50,12 @@ export const createTransaction = async (
         if (error.code === "P2025") {
           throw new NotFoundError("Account not found");
         }
-        // console.log(error.code + );
       }
+
+      if (error instanceof Prisma.PrismaClientUnknownRequestError) {
+        throw new UnprocessableEntityError("Insufficient funds");
+      }
+
       throw error;
     }
   });

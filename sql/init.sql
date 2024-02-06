@@ -5,9 +5,13 @@ CREATE TYPE "TransactionType" AS ENUM('c', 'd');
 CREATE TABLE "accounts" (
     "id" SERIAL NOT NULL PRIMARY KEY,
 
-    "saldo" BIGINT NOT NULL CHECK ("saldo" >= 0),
-    "limite" BIGINT NOT NULL CHECK ("limite" >= 0)
+    "saldo" BIGINT NOT NULL,
+    "limite" BIGINT NOT NULL
 );
+
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_saldo_zero_check" CHECK ("saldo" >= 0);
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_limite_zero_check" CHECK ("limite" >= 0);
+
 
 -- CreateTable
 CREATE TABLE "transactions" (

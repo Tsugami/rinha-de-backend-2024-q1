@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Account {
-  id          Int           @id
+  id          Int           @id @default(autoincrement())
   saldo       BigInt
   limite      BigInt
   transaction Transaction[]
@@ -22,8 +22,8 @@ model Transaction {
   tipo         TransactionType
   realizada_em DateTime        @default(now())
   account_id   Int
-  account      Account         @relation(fields: [account_id], references: [id])
   descricao    String?
+  account      Account         @relation(fields: [account_id], references: [id])
 
   @@map("transactions")
 }
