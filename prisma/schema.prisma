@@ -23,6 +23,7 @@ model Transaction {
   realizada_em DateTime        @default(now())
   account_id   Int
   account      Account         @relation(fields: [account_id], references: [id])
+  descricao    String?
 
   @@map("transactions")
 }
