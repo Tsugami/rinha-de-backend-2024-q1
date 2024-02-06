@@ -1,5 +1,5 @@
 export interface CreateTransactionInputDto {
-  cliente_id: string;
+  cliente_id: number;
   valor: number;
   tipo: "c" | "d";
   descricao: string;
