@@ -1,6 +1,6 @@
-version: '3.8'
+version: "3.9"
 services:
-  pg:
+  db:
     image: postgres:12
     environment:
       POSTGRES_USER: postgres
@@ -10,3 +10,23 @@ services:
       - "5432:5432"
     volumes:
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "--username=postgres",
+          "--host=127.0.0.1",
+          "--port=5432"
+        ]
+      interval: 2s
+      timeout: 1m
+      retries: 5
+      start_period: 10s
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
